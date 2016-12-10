@@ -28,6 +28,18 @@
                 </tr>
                 </thead>
                 <tbody>
+                <?php
+                /**
+                 * Created by PhpStorm.
+                 * User: Rajiv
+                 * Date: 10/12/16
+                 * Time: 12:53 PM
+                 */
+                require_once "classes/livesearch.php";
+                $liveSearchDetails=new LiveSearch();
+                $resultAllDetails=$liveSearchDetails->getLiveSearchAll();
+
+                ?>
                 <tr>
                     <td>Satou Nao</td>
                     <td>Accountant</td>
