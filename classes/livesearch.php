@@ -22,20 +22,36 @@ class LiveSearch extends DB
             return true;
         } else {
             $err_msg = "DB Connection Failed" . mysql_error();
-            return false .$err_msg;
+            return false . $err_msg;
         }
     }
 
     public function getLiveSearchAll()
     {
-        $allRows=array();
+        $allRows = array();
         $query = "SELECT * FROM employees";
         $result = mysql_query($query);
         if ($result) {
-            while ($rows = mysql_fetch_array($result)){
-                $allRows[]=$rows;
+            while ($rows = mysql_fetch_array($result)) {
+                $allRows[] = $rows;
             }
             return $allRows;
+        } else {
+            $err_msg = "DB Connection issue" . mysql_error();
+            return $err_msg;
+        }
+    }
+
+    public function getLiveSearchAllWebService()
+    {
+        $allRows = array();
+        $query = "SELECT * FROM employees";
+        $result = mysql_query($query);
+        if ($result) {
+            while ($rows = mysql_fetch_array($result)) {
+                $allRows[] = $rows;
+            }
+            return json_encode($allRows);
         } else {
             $err_msg = "DB Connection issue" . mysql_error();
             return $err_msg;
@@ -45,5 +61,9 @@ class LiveSearch extends DB
     public function __destruct()
     {
         // TODO: Implement __destruct() method.
+        mysql_close($this->db_connect);
+    }
+    public function addLiveEmployeeAdd(){
+
     }
 }
