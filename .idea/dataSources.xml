@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="1290018099">
+  <component name="DataSourceManagerImpl" format="xml" hash="2209746876">
     <data-source source="LOCAL" name="MySQL - livesearch@localhost" uuid="9f4daff9-cb19-44a3-b4a4-4e08acd99ecd">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>

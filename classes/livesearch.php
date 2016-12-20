@@ -1,15 +1,19 @@
 <?php
 
 /**
- * Created by PhpStorm.
+ * Created by Rajiv.
  * User: Rajiv
  * Date: 10/12/16
  * Time: 12:53 PM
  */
 require_once "db_config.php";
 
-class LiveSearch extends DB
+class LiveSearch
 {
+    public $host = DB_SERVER;
+    public $username = DB_USERNAME;
+    public $password = DB_PASSWORD;
+    public $dbname = DB_DATABASE;
     public $db_connect;
     public $db_select;
     public $err_msg;
@@ -58,12 +62,42 @@ class LiveSearch extends DB
         }
     }
 
+    public function showLiveSearch()
+    {
+        $resultLiveAll = array();
+        $sqlLiveSearch = "SELECT * FROM livesearch";
+        $resultLiveSearch = mysql_query($sqlLiveSearch);
+        if ($resultLiveSearch) {
+            while ($resultLive = mysql_fetch_array($resultLiveSearch)) {
+                $resultLiveAll[] = $resultLive;
+            }
+            return $resultLiveAll;
+        } else {
+            $err_msg = "Failed execution of query" . mysql_error();
+            return $err_msg;
+        }
+    }
+
+    public function loginUser($username, $password)
+    {
+        $resultUsers = array();
+        $sqlUsersSearch = "SELECT * FROM users WHERE username='.$username' AND password='.$password'";
+        $resultUsersSearch = mysql_query($sqlUsersSearch);
+        if ($resultUsersSearch) {
+            while ($resultUser = mysql_fetch_array($resultUsersSearch)) {
+                $resultUsers[] = $resultUser;
+            }
+            return $resultUsers;
+        } else {
+            $err_msg = "Failed execution of query" . mysql_error();
+            return $err_msg;
+        }
+    }
+
+
     public function __destruct()
     {
         // TODO: Implement __destruct() method.
         mysql_close($this->db_connect);
-    }
-    public function addLiveEmployeeAdd(){
-
     }
 }
