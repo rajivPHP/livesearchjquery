@@ -1,3 +1,7 @@
+<?php
+include "../../config/config.php";
+include "../../pages/library.php";
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,7 +33,7 @@
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/daterangepicker/daterangepicker.css">
     <!-- bootstrap wysihtml5 - text editor -->
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -48,6 +52,10 @@
             <!-- logo for regular state and mobile devices -->
             <span class="logo-lg"><b>Live</b>Search</span>
         </a>
+        <?php
+        session_start();
+        if (isset($_SESSION['username'])){
+        ?>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
             <!-- Sidebar toggle button-->
@@ -269,7 +277,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="<?php echo BASE_URL; ?>/dist/img/user2-160x160.jpg" class="user-image"
                                  alt="User Image">
-                            <span class="hidden-xs">Alexander Pierce</span>
+                            <span class="hidden-xs"><?php echo $_SESSION['username']; ?></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
@@ -278,8 +286,7 @@
                                      alt="User Image">
 
                                 <p>
-                                    Alexander Pierce - Web Developer
-                                    <small>Member since Nov. 2012</small>
+                                    <?php echo $_SESSION['username']; ?>
                                 </p>
                             </li>
                             <!-- Menu Body -->
@@ -303,7 +310,7 @@
                                     <a href="#" class="btn btn-default btn-flat">Profile</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                    <a href="logout.php" class="btn btn-default btn-flat">Sign out</a>
                                 </div>
                             </li>
                         </ul>
@@ -317,5 +324,7 @@
         </nav>
     </header>
     <!-- Left side column. contains the logo and sidebar -->
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+    <?php } else {
+        header("location:http://" . BASE_URL . "");
+    }
+    ?>

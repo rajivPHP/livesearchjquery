@@ -1,50 +1,50 @@
 /* Flot plugin for thresholding data.
 
-Copyright (c) 2007-2013 IOLA and Ole Laursen.
-Licensed under the MIT license.
+ Copyright (c) 2007-2013 IOLA and Ole Laursen.
+ Licensed under the MIT license.
 
-The plugin supports these options:
+ The plugin supports these options:
 
-	series: {
-		threshold: {
-			below: number
-			color: colorspec
-		}
-	}
+ series: {
+ threshold: {
+ below: number
+ color: colorspec
+ }
+ }
 
-It can also be applied to a single series, like this:
+ It can also be applied to a single series, like this:
 
-	$.plot( $("#placeholder"), [{
-		data: [ ... ],
-		threshold: { ... }
-	}])
+ $.plot( $("#placeholder"), [{
+ data: [ ... ],
+ threshold: { ... }
+ }])
 
-An array can be passed for multiple thresholding, like this:
+ An array can be passed for multiple thresholding, like this:
 
-	threshold: [{
-		below: number1
-		color: color1
-	},{
-		below: number2
-		color: color2
-	}]
+ threshold: [{
+ below: number1
+ color: color1
+ },{
+ below: number2
+ color: color2
+ }]
 
-These multiple threshold objects can be passed in any order since they are
-sorted by the processing function.
+ These multiple threshold objects can be passed in any order since they are
+ sorted by the processing function.
 
-The data points below "below" are drawn with the specified color. This makes
-it easy to mark points below 0, e.g. for budget data.
+ The data points below "below" are drawn with the specified color. This makes
+ it easy to mark points below 0, e.g. for budget data.
 
-Internally, the plugin works by splitting the data into two series, above and
-below the threshold. The extra series below the threshold will have its label
-cleared and the special "originSeries" attribute set to the original series.
-You may need to check for this in hover events.
+ Internally, the plugin works by splitting the data into two series, above and
+ below the threshold. The extra series below the threshold will have its label
+ cleared and the special "originSeries" attribute set to the original series.
+ You may need to check for this in hover events.
 
-*/
+ */
 
 (function ($) {
     var options = {
-        series: { threshold: null } // or { below: number, color: color spec}
+        series: {threshold: null} // or { below: number, color: color spec}
     };
 
     function init(plot) {
@@ -52,7 +52,7 @@ You may need to check for this in hover events.
             var ps = datapoints.pointsize, i, x, y, p, prevp,
                 thresholded = $.extend({}, s); // note: shallow copy
 
-            thresholded.datapoints = { points: [], pointsize: ps, format: datapoints.format };
+            thresholded.datapoints = {points: [], pointsize: ps, format: datapoints.format};
             thresholded.label = null;
             thresholded.color = color;
             thresholded.threshold = null;
@@ -117,11 +117,11 @@ You may need to check for this in hover events.
                 return;
 
             if (s.threshold instanceof Array) {
-                s.threshold.sort(function(a, b) {
+                s.threshold.sort(function (a, b) {
                     return a.below - b.below;
                 });
 
-                $(s.threshold).each(function(i, th) {
+                $(s.threshold).each(function (i, th) {
                     thresholdData(plot, s, datapoints, th.below, th.color);
                 });
             }

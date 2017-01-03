@@ -6,4 +6,5 @@
  * Time: 4:34 PM
  */
 define('BASE_URL', 'http://localhost/livesearch');
+define('SITE_NAME', 'LIVE SEARCH');
 ?>

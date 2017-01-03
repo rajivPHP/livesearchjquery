@@ -1,5 +1,3 @@
-
-
 <!-- Control Sidebar -->
 <aside class="control-sidebar control-sidebar-dark">
     <!-- Create the tabs -->
@@ -196,17 +194,5 @@
 <div class="control-sidebar-bg"></div>
 <!-- ./wrapper -->
 </div>
-<!-- jQuery 2.2.3 -->
-<script src="<?php echo BASE_URL; ?>/plugins/jQuery/jquery-2.2.3.min.js"></script>
-<!-- Bootstrap 3.3.6 -->
-<script src="<?php echo BASE_URL; ?>/bootstrap/js/bootstrap.min.js"></script>
-<!-- SlimScroll -->
-<script src="<?php echo BASE_URL; ?>//plugins/slimScroll/jquery.slimscroll.min.js"></script>
-<!-- FastClick -->
-<script src="<?php echo BASE_URL; ?>//plugins/fastclick/fastclick.js"></script>
-<!-- AdminLTE App -->
-<script src="<?php echo BASE_URL; ?>//dist/js/app.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="<?php echo BASE_URL; ?>/dist/js/demo.js"></script>
 </body>
 </html>

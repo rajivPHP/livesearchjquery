@@ -6,7 +6,7 @@
  * Date: 10/12/16
  * Time: 12:53 PM
  */
-require_once "db_config.php";
+require_once "config/db_config.php";
 
 class LiveSearch
 {
@@ -81,7 +81,7 @@ class LiveSearch
     public function loginUser($username, $password)
     {
         $resultUsers = array();
-        $sqlUsersSearch = "SELECT * FROM users WHERE username='.$username' AND password='.$password'";
+        $sqlUsersSearch = "SELECT * FROM users WHERE username='" . $username . "' AND password='" . $password . "'";
         $resultUsersSearch = mysql_query($sqlUsersSearch);
         if ($resultUsersSearch) {
             while ($resultUser = mysql_fetch_array($resultUsersSearch)) {
@@ -94,6 +94,60 @@ class LiveSearch
         }
     }
 
+    public function getEmployeeById($id)
+    {
+        $resultEmployee = array();
+        $sqlEmployeeSearch = "SELECT * FROM employees WHERE id= '" . $id . "'";
+        $resultEmployeeSearch = mysql_query($sqlEmployeeSearch);
+        if (mysql_num_rows($resultEmployeeSearch) !== NULL) {
+            $resultEmployee = mysql_fetch_assoc($resultEmployeeSearch) or die(mysql_error());
+            return $resultEmployee;
+        } else {
+            $err_msg = "Failed execution of query" . mysql_error();
+            return $err_msg;
+        }
+
+    }
+
+    public function updateEmployees($empId, $firstName, $lastName, $salary, $designation)
+    {
+        $sqlEmployeeUpdate = "UPDATE employees SET firstname='" . $firstName . "',lastname='" . $lastName . "',
+  designation='" . $designation . "',salary='" . $salary . "'
+        WHERE id=$empId";
+        $resultEmployeeUpdate = mysql_query($sqlEmployeeUpdate);
+        if ($resultEmployeeUpdate) {
+            return $resultEmployeeUpdate;
+        } else {
+            $err_msg = "Failed execution of query&nbsp;" . mysql_error();
+            return $err_msg;
+        }
+    }
+
+    public function deleteEmployee($id)
+    {
+        $sqlEmployeeDelete = "DELETE FROM employees WHERE id=$id";
+        $resultEmployeeDelete = mysql_query($sqlEmployeeDelete);
+        if ($resultEmployeeDelete) {
+            return $resultEmployeeDelete;
+        } else {
+            $err_msg = "Failed execution of query&nbsp;" . mysql_error();
+            return $err_msg;
+        }
+    }
+
+    public function createEmployee($firstname, $lastname, $salary, $designation)
+    {
+        $sqlEmployeeAdd = "INSERT INTO employees(firstname,lastname,salary,designation)
+        VALUES('$firstname','$lastname','$salary','$designation')";
+        $resultEmployeeAdd = mysql_query($sqlEmployeeAdd);
+        if ($resultEmployeeAdd) {
+            return $sqlEmployeeAdd;
+            //return mysql_affected_rows($resultEmployeeAdd);
+        } else {
+            $err_msg = "Failed execution of query&nbsp;" . mysql_error();
+            return $err_msg;
+        }
+    }
 
     public function __destruct()
     {
