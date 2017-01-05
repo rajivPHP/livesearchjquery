@@ -13,11 +13,9 @@ if (isset($_SESSION['username']) && isset($_POST['id'])) {
     $resultDeleteEmployee = $deleteEmployee->deleteEmployee($id);
     if ($resultDeleteEmployee) {
         $msg = "Employee deletion was successful";
-        header("location:../homepage.php?msg=$msg");
-        return true;
+        return $msg;
     } else {
         $msg = "Employee deletion was not successful";
-        header("location:../homepage.php?msg=$msg");
-        return false;
+        return $msg;
     }
 }

@@ -20,12 +20,11 @@ class LiveSearch
 
     public function __construct()
     {
-        $this->db_connect = mysql_connect($this->host, $this->username, $this->password);
+        $this->db_connect = mysqli_connect($this->host, $this->username, $this->password,$this->dbname);
         if ($this->db_connect) {
-            $this->db_select = mysql_select_db($this->dbname);
             return true;
         } else {
-            $err_msg = "DB Connection Failed" . mysql_error();
+            $err_msg = "DB Connection Failed" . mysqli_connect_error();
             return false . $err_msg;
         }
     }
@@ -34,14 +33,14 @@ class LiveSearch
     {
         $allRows = array();
         $query = "SELECT * FROM employees";
-        $result = mysql_query($query);
+        $result = mysqli_query($this->db_connect,$query);
         if ($result) {
-            while ($rows = mysql_fetch_array($result)) {
+            while ($rows = mysqli_fetch_array($result)) {
                 $allRows[] = $rows;
             }
             return $allRows;
         } else {
-            $err_msg = "DB Connection issue" . mysql_error();
+            $err_msg = "DB Connection issue" . mysqli_connect_error();
             return $err_msg;
         }
     }
@@ -50,14 +49,14 @@ class LiveSearch
     {
         $allRows = array();
         $query = "SELECT * FROM employees";
-        $result = mysql_query($query);
+        $result = mysqli_query($this->db_connect,$query);
         if ($result) {
-            while ($rows = mysql_fetch_array($result)) {
+            while ($rows = mysqli_fetch_array($result)) {
                 $allRows[] = $rows;
             }
             return json_encode($allRows);
         } else {
-            $err_msg = "DB Connection issue" . mysql_error();
+            $err_msg = "DB Connection issue" . mysqli_connect_error();
             return $err_msg;
         }
     }
@@ -65,14 +64,14 @@ class LiveSearch
     {
         $allRows = array();
         $query = "SELECT * FROM employees";
-        $result = mysql_query($query);
+        $result = mysqli_query($this->db_connect,$query);
         if ($result) {
-            while ($rows = mysql_fetch_array($result)) {
+            while ($rows = mysqli_fetch_array($result)) {
                 $allRows[] = $rows;
             }
             return $allRows;
         } else {
-            $err_msg = "DB Connection issue" . mysql_error();
+            $err_msg = "DB Connection issue" . mysqli_connect_error();
             return $err_msg;
         }
     }
@@ -82,14 +81,14 @@ class LiveSearch
     {
         $resultLiveAll = array();
         $sqlLiveSearch = "SELECT * FROM livesearch";
-        $resultLiveSearch = mysql_query($sqlLiveSearch);
+        $resultLiveSearch = mysqli_query($this->db_connect,$sqlLiveSearch);
         if ($resultLiveSearch) {
-            while ($resultLive = mysql_fetch_array($resultLiveSearch)) {
+            while ($resultLive = mysqli_fetch_array($resultLiveSearch)) {
                 $resultLiveAll[] = $resultLive;
             }
             return $resultLiveAll;
         } else {
-            $err_msg = "Failed execution of query" . mysql_error();
+            $err_msg = "Failed execution of query" . mysqli_connect_error();
             return $err_msg;
         }
     }
@@ -98,14 +97,14 @@ class LiveSearch
     {
         $resultUsers = array();
         $sqlUsersSearch = "SELECT * FROM users WHERE username='" . $username . "' AND password='" . $password . "'";
-        $resultUsersSearch = mysql_query($sqlUsersSearch);
+        $resultUsersSearch = mysqli_query($this->db_connect,$sqlUsersSearch);
         if ($resultUsersSearch) {
-            while ($resultUser = mysql_fetch_array($resultUsersSearch)) {
+            while ($resultUser = mysqli_fetch_array($resultUsersSearch)) {
                 $resultUsers[] = $resultUser;
             }
             return $resultUsers;
         } else {
-            $err_msg = "Failed execution of query" . mysql_error();
+            $err_msg = "Failed execution of query" . mysqli_connect_error();
             return $err_msg;
         }
     }
@@ -114,12 +113,12 @@ class LiveSearch
     {
         $resultEmployee = array();
         $sqlEmployeeSearch = "SELECT * FROM employees WHERE id= '" . $id . "'";
-        $resultEmployeeSearch = mysql_query($sqlEmployeeSearch);
-        if (mysql_num_rows($resultEmployeeSearch) !== NULL) {
-            $resultEmployee = mysql_fetch_assoc($resultEmployeeSearch) or die(mysql_error());
+        $resultEmployeeSearch = mysqli_query($this->db_connect,$sqlEmployeeSearch);
+        if (mysqli_num_rows($this->db_connect,$resultEmployeeSearch) !== NULL) {
+            $resultEmployee = mysqli_fetch_assoc($resultEmployeeSearch) or die(mysqli_connect_error());
             return $resultEmployee;
         } else {
-            $err_msg = "Failed execution of query" . mysql_error();
+            $err_msg = "Failed execution of query" . mysqli_connect_error();
             return $err_msg;
         }
 
@@ -130,11 +129,11 @@ class LiveSearch
         $sqlEmployeeUpdate = "UPDATE employees SET firstname='" . $firstName . "',lastname='" . $lastName . "',
   designation='" . $designation . "',salary='" . $salary . "'
         WHERE id=$empId";
-        $resultEmployeeUpdate = mysql_query($sqlEmployeeUpdate);
+        $resultEmployeeUpdate = mysqli_query($this->db_connect,$sqlEmployeeUpdate);
         if ($resultEmployeeUpdate) {
             return $resultEmployeeUpdate;
         } else {
-            $err_msg = "Failed execution of query&nbsp;" . mysql_error();
+            $err_msg = "Failed execution of query&nbsp;" . mysqli_connect_error();
             return $err_msg;
         }
     }
@@ -142,11 +141,11 @@ class LiveSearch
     public function deleteEmployee($id)
     {
         $sqlEmployeeDelete = "DELETE FROM employees WHERE id=$id";
-        $resultEmployeeDelete = mysql_query($sqlEmployeeDelete);
+        $resultEmployeeDelete = mysqli_query($this->db_connect,$sqlEmployeeDelete);
         if ($resultEmployeeDelete) {
             return $resultEmployeeDelete;
         } else {
-            $err_msg = "Failed execution of query&nbsp;" . mysql_error();
+            $err_msg = "Failed execution of query&nbsp;" . mysqli_connect_error();
             return $err_msg;
         }
     }
@@ -155,12 +154,12 @@ class LiveSearch
     {
         $sqlEmployeeAdd = "INSERT INTO employees(firstname,lastname,salary,designation)
         VALUES('$firstname','$lastname','$salary','$designation')";
-        $resultEmployeeAdd = mysql_query($sqlEmployeeAdd);
+        $resultEmployeeAdd = mysqli_query($this->db_connect,$sqlEmployeeAdd);
         if ($resultEmployeeAdd) {
             return $resultEmployeeAdd;
-            //return mysql_affected_rows($resultEmployeeAdd);
+            //return mysqli_affected_rows($resultEmployeeAdd);
         } else {
-            $err_msg = "Failed execution of query&nbsp;" . mysql_error();
+            $err_msg = "Failed execution of query&nbsp;" . mysqli_connect_error();
             return $err_msg;
         }
     }
@@ -170,12 +169,12 @@ class LiveSearch
         $eIds = implode(",", $empIds);
         if ($eIds) {
             $sqlDeleteEmployeeMultiple = "DELETE FROM employees where id IN($eIds);";
-            $resultDeleteEmployeeMultiple = mysql_query($sqlDeleteEmployeeMultiple);
+            $resultDeleteEmployeeMultiple = mysqli_query($this->db_connect,$sqlDeleteEmployeeMultiple);
             if ($resultDeleteEmployeeMultiple) {
                 return 1;
             }
         } else {
-            $err_msg = "Failed execution of query&nbsp;" . mysql_error();
+            $err_msg = "Failed execution of query&nbsp;" . mysqli_connect_error();
             return $err_msg;
         }
     }
@@ -183,6 +182,6 @@ class LiveSearch
     public function __destruct()
     {
         // TODO: Implement __destruct() method.
-        mysql_close($this->db_connect);
+        mysqli_close($this->db_connect);
     }
 }

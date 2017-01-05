@@ -13,8 +13,7 @@ if (isset($_POST['firstname'])) {
     $salary = trim($_POST['salary']);
     $designation = trim($_POST['designation']);
     $addEmployee = new LiveSearch();
-    $resultAddEmployee = $addEmployee->createEmployee($firstname, $lastname, $salary, $designation);
-    echo $resultAddEmployee;exit;
+    $resultAddEmployee = $addEmployee->createEmployee($firstname, $lastname, $salary, $designation);echo $resultAddEmployee;exit;
     if ($resultAddEmployee) {
         $msg = "Employee Creation was successful";
         header("location:../homepage.php?msg=$msg");

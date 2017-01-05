@@ -89,7 +89,8 @@ include("templates/admin/admin_menu.php");
                                     foreach ($resultAllDetails as $showDetails) {
                                         ?>
                                         <tr class="ui-state-default" id="dragclass">
-                                            <td><?php echo $i; ?><input type="checkbox"
+                                            <td><?php echo $i; ?>
+                                                <input type="checkbox"
                                                                         value="<?php echo $showDetails['id']; ?>"
                                                                         class="select-list">
                                             </td>

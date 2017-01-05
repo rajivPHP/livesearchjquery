@@ -9,8 +9,8 @@ include "../config/config.php";
 if (isset($_POST)) {
     include "../classes/livesearch.php";
     $getUser = new LiveSearch();
-    $username = mysql_real_escape_string($_POST['username']);
-    $password = mysql_real_escape_string($_POST['password']);
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
     $welcomeUser = $getUser->loginUser($username, $password);
     if ($welcomeUser) {
         session_start();
