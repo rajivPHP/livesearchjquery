@@ -61,6 +61,22 @@ class LiveSearch
             return $err_msg;
         }
     }
+    public function getEmployeesAll()
+    {
+        $allRows = array();
+        $query = "SELECT * FROM employees";
+        $result = mysql_query($query);
+        if ($result) {
+            while ($rows = mysql_fetch_array($result)) {
+                $allRows[] = $rows;
+            }
+            return $allRows;
+        } else {
+            $err_msg = "DB Connection issue" . mysql_error();
+            return $err_msg;
+        }
+    }
+
 
     public function showLiveSearch()
     {
@@ -141,8 +157,23 @@ class LiveSearch
         VALUES('$firstname','$lastname','$salary','$designation')";
         $resultEmployeeAdd = mysql_query($sqlEmployeeAdd);
         if ($resultEmployeeAdd) {
-            return $sqlEmployeeAdd;
+            return $resultEmployeeAdd;
             //return mysql_affected_rows($resultEmployeeAdd);
+        } else {
+            $err_msg = "Failed execution of query&nbsp;" . mysql_error();
+            return $err_msg;
+        }
+    }
+
+    public function deleteEmployeeMultiple($empIds)
+    {
+        $eIds = implode(",", $empIds);
+        if ($eIds) {
+            $sqlDeleteEmployeeMultiple = "DELETE FROM employees where id IN($eIds);";
+            $resultDeleteEmployeeMultiple = mysql_query($sqlDeleteEmployeeMultiple);
+            if ($resultDeleteEmployeeMultiple) {
+                return 1;
+            }
         } else {
             $err_msg = "Failed execution of query&nbsp;" . mysql_error();
             return $err_msg;

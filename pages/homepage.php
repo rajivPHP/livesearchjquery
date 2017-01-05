@@ -29,7 +29,7 @@ include("templates/admin/admin_menu.php");
                 <div class="box-header with-border">
                     <h3 class="box-title">Employees</h3>
                     <button type="button" id="createemployee" class="btn btn-success pull-right" style="margin:0 60px"
-                            onclick="createEmployee();"><i class="fa fa fa-user"></i> CREATE EMPLOYEE
+                            onclick="createEmployee();">CREATE EMPLOYEE
                     </button>
                     <div class="box-tools pull-right">
 
@@ -57,6 +57,11 @@ include("templates/admin/admin_menu.php");
 
                     <div class="row">
                         <div class="col-sm-12">
+                            <div>
+                                Select All<input type="checkbox" class="select-all" id="select-all">
+                                <button id="delete-selected" class="btn btn-success">Delete Selected</button>
+                                <button id="export-all" class="btn btn-success">Export All</button>
+                            </div>
                             <table class="table table-bordered table-striped" id="employees" cellspacing="0">
                                 <thead>
                                 <tr>
@@ -84,7 +89,10 @@ include("templates/admin/admin_menu.php");
                                     foreach ($resultAllDetails as $showDetails) {
                                         ?>
                                         <tr class="ui-state-default" id="dragclass">
-                                            <td><?php echo $i; ?></td>
+                                            <td><?php echo $i; ?><input type="checkbox"
+                                                                        value="<?php echo $showDetails['id']; ?>"
+                                                                        class="select-list">
+                                            </td>
                                             <td><?php echo $showDetails['firstname']; ?></td>
                                             <td><?php echo $showDetails['lastname']; ?></td>
                                             <td><?php echo $showDetails['designation']; ?></td>
@@ -97,7 +105,12 @@ include("templates/admin/admin_menu.php");
                                                 <a href="?id=<?php echo $showDetails['id']; ?>" id="editemployee"
                                                    name="deleteemployee"
                                                    onclick="return deleteEmployee(<?php echo $showDetails['id']; ?>);"><i
-                                                        class="fa fa-remove"></i></a></td>
+                                                        class="fa fa-trash"></i></a>
+                                                <a href="?id=<?php echo $showDetails['id']; ?>" id="viewemployee"
+                                                   name="viewemployee"
+                                                   onclick="viewemployee(<?php echo $showDetails['id']; ?>);return false;"><i
+                                                        class="fa fa-search"></i></a>
+                                            </td>
                                         </tr>
                                         <?php
                                         $i++;
@@ -132,6 +145,11 @@ include("templates/admin/admin_menu.php");
 
         $(document).ready(function () {
 
+            $('.select-all').click(function () {
+                var checkedStatus = this.checked;
+                $('.select-list').prop('checked', checkedStatus);
+            });
+
             $('.close').click(function () {
                 <?php header("location:homepage.php");?>
             });
@@ -145,7 +163,36 @@ include("templates/admin/admin_menu.php");
                 "autoWidth": true
             });
         });
-        
+
+        function viewemployee(id) {
+            var id = id;
+            $.ajax({
+                type: "POST",
+                url: 'employee/viewEmployee.php',
+                data: {id: id},
+                beforeSend: function () {
+                    console.log("sending");
+                },
+                success: function (data) {
+                    var dialog = $('<div id=\'show_dialog\'></div>').dialog({
+                        title: "View Employee",
+                        open: function (event, ui) {
+                            $(".ui-widget-overlay").css({
+                                opacity: 1.0,
+                                filter: "Alpha(Opacity=100)",
+                                backgroundColor: "#9e9e9e"
+                            });
+                        },
+                        modal: true,
+                        beforeClose: function (event, ui) {
+                            $("body").css({overflow: 'inherit'})
+                        }
+                    });
+                    dialog.html(data);
+                }
+            });
+        }
+
         function updateSource(id, name) {
             var name = name;
             $.ajax({
@@ -157,7 +204,7 @@ include("templates/admin/admin_menu.php");
                 },
                 success: function (data) {
                     var dialog = $('<div id=\'show_dialog\'></div>').dialog({
-                        title: name,
+                        title: "Update Employee",
                         open: function (event, ui) {
                             $(".ui-widget-overlay").css({
                                 opacity: 1.0,
@@ -175,7 +222,7 @@ include("templates/admin/admin_menu.php");
             });
         }
         function deleteEmployee(id) {
-            var confirm = window.confirm("Are you sure to delete Employee");
+            var confirm = window.confirm("Are you sure to delete Employee??");
             if (confirm == true) {
                 var id = id;
                 $.ajax({
@@ -203,7 +250,7 @@ include("templates/admin/admin_menu.php");
                 },
                 success: function (data) {
                     var dialog = $('<div id=\'show_dialog\'></div>').dialog({
-                        title: name,
+                        title: "Add Employee",
                         open: function (event, ui) {
                             $(".ui-widget-overlay").css({
                                 opacity: 1.0,
@@ -211,18 +258,60 @@ include("templates/admin/admin_menu.php");
                                 backgroundColor: "#9e9e9e"
                             });
                         },
-                        modal: true,
-                        beforeClose: function (event, ui) {
-                            $("body").css({overflow: 'inherit'})
-                        }
+                        modal: true
+                        /*beforeClose: function (event, ui) {
+                         $("body").css({overflow: 'inherit'});
+                         }*/
                     });
                     dialog.html(data);
                 }
             });
         }
-        /* $('#editemployee').on("click", function (event) {
-         event.preventDefault();
-         });*/
+        $('#delete-selected').click(function () {
+            var deleteIds = [];
+            $('.select-list').each(function () {
+                if (this.checked == true) {
+                    deleteIds.push($(this).val());
+                }
+                else {
+                }
+            });
+            if (deleteIds.length == 0) {
+                alert("Select list to delete");
+                return false;
+            }
+            else {
+                return true;
+                $.ajax({
+                    type: "POST",
+                    url: "employee/deleteMultipleEmployee.php",
+                    data: {employeeIds: deleteIds},
+                    dataType: "JSON",
+                    beforeSend: function () {
+                        console.log("sending");
+                    },
+                    success: function (response) {
+                        alert(response);
+                        $.notify(response);
+                    }
+                });
+            }
+        });
+        $('#export-all').click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "employee/exportEmployee.php",
+                dataType: "JSON",
+                beforeSend: function () {
+                    alert("Processing");
+                },
+                success: function (response) {
+                    alert(response);
+                    window.open('data:application/vnd.ms-excel,' + encodeURIComponent(response));
+                }
+            });
+        })
     </script>
     <?php
 } else {

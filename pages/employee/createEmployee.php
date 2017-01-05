@@ -1,4 +1,4 @@
- <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" name="employeeadd" id="employeeadd">
+ <form method="post" action="#" name="employeeadd" id="employeeadd">
         <div class="form-group">
             <label class="control-sidebar-subheading">
                 First Name
@@ -24,8 +24,8 @@
             </label>
         </div>
         <div class="form-group">
-            <input type="button" class="pull-right" value="CREATE" name="submit" onclick="validateEmployee();"
-                   id="addemployee">
+            <input type="button" class="pull-right" value="CREATE" name="submit"
+                   id="addemployee" onclick="javascript:validateEmployee(true);return false;">
             <input type="reset" class="pull-right" value="Reset">
         </div>
     </form>
@@ -52,18 +52,20 @@
             return false;
         }
         else {
-            return true;
-            //$('form').submit();
-
+            //return true;
+            //$("#employeeadd").submit();
+            //document.getElementById("employeeadd").submit();
             $.ajax({
                 type: "POST",
-                url: "addEmployee.php",
+                url: "employee/addEmployee.php",
                 data: {firstname: firstname, lastname: lastname, designation: designation, salary: salary},
                 beforeSend: function () {
                     console.log("sending");
                 },
                 success: function (data) {
-                    //window.location.reload();
+                    $.notify("Adding Employee was successful");
+                    $("#show_dialog").dialog('close');
+                    window.location.reload();
                 }
             });
         }
